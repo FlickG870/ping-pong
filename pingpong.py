@@ -40,9 +40,13 @@ class Player(GameSprite):
 
 player1 = Player('platform.png', 50, 200, 0, 150, 3, pygame.K_UP, pygame.K_DOWN) 
 player2 = Player('platform2.png', 50, 200, 655, 150, 3, pygame.K_w, pygame.K_s)
+ball = GameSprite('ball.png', 50, 50, 120, 120, 4)
 
 score_player1 = 0
 score_player2 = 0
+
+speed_ball_x = 4
+speed_ball_y = 3
 
 while rungame:
     for event in pygame.event.get():
@@ -51,10 +55,33 @@ while rungame:
 
     player1.move()
     player2.move()
+    ball.rect.x += speed_ball_x
+    ball.rect.y += speed_ball_y
+
+    if ball.rect.y >= 450:
+        speed_ball_y *= -1
+    if ball.rect.y <= 0:
+        speed_ball_y *= -1
+    if ball.rect.x >= 700:
+        score_player1 += 1
+        ball.rect.x = 600
+        ball.rect.y = 200
+        speed_ball_x = -4 
+    if ball.rect.x <= 0:
+        score_player2 += 1
+        ball.rect.x = 100
+        ball.rect.y = 200
+        speed_ball_x = 4
+
+    if pygame.sprite.collide_rect(ball, player1):
+        speed_ball_x = 4
+    if pygame.sprite.collide_rect(ball, player2):
+        speed_ball_x = -4     
 
     win.fill([3, 177, 252])
     player1.reset()
     player2.reset()
+    ball.reset()
 
     pygame.display.update()
     clock.tick(FPS) 
