@@ -37,10 +37,13 @@ class Player(GameSprite):
         if list_key[self.button_down] and self.rect.y < 300:
             self.rect.y += self.speed
 
-
-player1 = Player('platform.png', 50, 200, 0, 150, 3, pygame.K_UP, pygame.K_DOWN) 
-player2 = Player('platform2.png', 50, 200, 655, 150, 3, pygame.K_w, pygame.K_s)
+player1 = Player('platform.png', 50, 100, 0, 150, 3, pygame.K_UP, pygame.K_DOWN) 
+player2 = Player('platform2.png', 50, 100, 655, 150, 3, pygame.K_w, pygame.K_s)
 ball = GameSprite('ball.png', 50, 50, 120, 120, 4)
+
+f1 = pygame.font.SysFont('Arial', 48)
+f2 = pygame.font.SysFont('Arial', 72, bold=True)
+r1 = pygame.Rect((345, 0, 10, 500))
 
 score_player1 = 0
 score_player2 = 0
@@ -73,6 +76,9 @@ while rungame:
         ball.rect.y = 200
         speed_ball_x = 4
 
+    player1_text = f1.render(str(score_player1), True, (255, 255, 255))
+    player2_text = f1.render(str(score_player2), True, (255, 255, 255))
+
     if pygame.sprite.collide_rect(ball, player1):
         speed_ball_x = 4
     if pygame.sprite.collide_rect(ball, player2):
@@ -81,7 +87,19 @@ while rungame:
     win.fill([3, 177, 252])
     player1.reset()
     player2.reset()
+    pygame.draw.rect(win, [0, 0, 0], r1)    
     ball.reset()
+    win.blit(player1_text, [280, 0])
+    win.blit(player2_text, [390, 0])
+
+    if score_player1 == 2:
+        player1_wtext = f2.render('Player1 - WIN', True, (255, 255, 255))
+        win.blit(player1_wtext, [100, 250])
+        rungame = False
+    if score_player2 == 2:
+        player2_wtext = f2.render('Player2 - WIN', True, (255, 255, 255))
+        win.blit(player2_wtext, [100, 250])
+        rungame = False
 
     pygame.display.update()
     clock.tick(FPS) 
